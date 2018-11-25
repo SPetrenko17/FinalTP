@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:fitsSystemWindows="true"
+    android:weightSum="1"
+    android:id="@+id/drawer_layout"
+    >
+<LinearLayout
+    android:id="@+id/map_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <fragment
+        android:id="@+id/searchFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="8"
+        android:paddingBottom="5dp"
+        android:paddingEnd="5dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingStart="5dp"
+        android:paddingTop="5dp"
+        android:layout_height="match_parent"
+        android:name="com.example.sergei.finaltp.Fragments.SearchFragment"/>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:name="com.example.sergei.finaltp.Fragments.MapFragment"/>
+
+</LinearLayout>
+    <LinearLayout
+        android:id="@+id/place_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <fragment
+            android:id="@+id/placesFragment"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:name="com.example.sergei.finaltp.Fragments.PlacesFragment"/>
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        android:theme="@style/NavigationTheme"
+        app:headerLayout="@layout/navview_header"
+        app:menu="@menu/drawer_view">
+
+    </android.support.design.widget.NavigationView>
+
+
+
+
+
+
+
+</android.support.v4.widget.DrawerLayout>
