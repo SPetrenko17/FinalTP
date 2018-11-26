@@ -16,6 +16,11 @@
             android:icon="@android:drawable/btn_default"
             android:textColor="@color/textPrimaryColor"
             android:title="Мои маршруты"/>
+        <item
+            android:id="@+id/user_settings"
+            android:icon="@android:drawable/btn_default"
+            android:textColor="@color/textPrimaryColor"
+            android:title="Настройки"/>
 
         <item
             android:id="@+id/exit"

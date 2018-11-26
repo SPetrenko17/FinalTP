@@ -41,10 +41,6 @@ public class SearchFragment extends Fragment  {
     EditText seachEditText;
     String adress;
     User user;
-
-
-
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,8 +74,6 @@ public class SearchFragment extends Fragment  {
     @Override
     public void onStop() {
         super.onStop();
-        SharedPreferences pref = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
     }
     private void parseJSON() {
         adress=seachEditText.getText().toString();
@@ -91,16 +85,12 @@ public class SearchFragment extends Fragment  {
                 final Gson gson = new Gson();
                 Type userType = new TypeToken<User>(){}.getType();
                 user = gson.fromJson(result.toString(), userType);
-                SharedPreferences pref = getActivity().getPreferences(getActivity().MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                Log.d("MAP","SearchFragment-parseJSON-onSucces-putString:"+user.response.geoObjectCollection.featureMember.get(0).geoObject.point.pos.toString());
-                editor.putString(KEY_CORDS,user.response.geoObjectCollection.featureMember.get(0).geoObject.point.pos.toString());
-                editor.apply();
                 Log.d("MAP","SearchFragment-parseJSON-onSucces  ALL OBJECTS: \n");
                 for(int i =0;i<user.response.geoObjectCollection.featureMember.size();i++){
                     Log.d("MAP",i+": "+user.response.geoObjectCollection.featureMember.get(i).geoObject.point.pos.toString()+"\n");
                 }
-                mListener.onFragmentAction(adress);
+                mListener.onFragmentAction(user.response.geoObjectCollection.featureMember.get(0).geoObject.point.pos.toString());
+                mListener.onFragmentAction(user);
             }
             @Override
             public void onSuccess(JSONArray result) {
@@ -123,6 +113,7 @@ public class SearchFragment extends Fragment  {
 
     public interface OnFragmentActionListener {
         void onFragmentAction(String link);
+        void onFragmentAction(User user);
     }
 
 

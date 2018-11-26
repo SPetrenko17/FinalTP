@@ -1,43 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:id="@+id/item_place"
+    android:orientation="horizontal"
     >
+    <LinearLayout
+        android:id="@+id/point_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
     <TextView
         android:id="@+id/place_name"
-        android:layout_width="300dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textColor="@color/colorWhite"
-        android:layout_alignParentStart="true"
+        android:layout_weight="1"
         />
     <TextView
         android:id="@+id/place_adress"
-        android:layout_width="300dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textColor="@color/colorWhite"
         android:layout_alignParentStart="true"
+        android:layout_weight="1"
         />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/latlng_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
     <TextView
         android:id="@+id/place_lat"
-        android:layout_width="300dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textColor="@color/colorWhite"
         android:layout_alignParentStart="true"
+        android:layout_weight="1"
         />
     <TextView
         android:id="@+id/place_lng"
-        android:layout_width="300dp"
-        android:layout_height="25dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textColor="@color/colorWhite"
         android:layout_alignParentStart="true"
+        android:layout_weight="1"
         />
+    </LinearLayout>
     <Button
-        android:layout_width="60dp"
-        android:layout_height="35dp"
+        android:layout_weight="2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/place_button"/>
-</RelativeLayout>
+</LinearLayout>
