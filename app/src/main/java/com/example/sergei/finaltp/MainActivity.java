@@ -1,17 +1,21 @@
 package com.example.sergei.finaltp;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,18 +31,23 @@ import com.example.sergei.finaltp.Fragments.PlacesFragment;
 import com.example.sergei.finaltp.Fragments.SearchFragment;
 import com.example.sergei.finaltp.serializables.User;
 import com.yandex.mapkit.MapKitFactory;
+import com.yandex.mapkit.geometry.Point;
 
 
-public class MainActivity extends AppCompatActivity implements SearchFragment.OnFragmentActionListener , GridAdapter.onItemClickListener   {
+public class MainActivity extends AppCompatActivity implements SearchFragment.OnFragmentActionListener , GridAdapter.onItemClickListener , MapFragment.OnFragmentActionListener  {
     private final static String KEY_CORDS = "cords";
     private DrawerLayout mDrawerLayout;
     TextView currentPoint;
-
+    static LocationProvider locationProvider;
+    static LocationManager locationManager;
+    static Location fakeloc;
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        checkPermissions();
+
         MapKitFactory.setApiKey(getResources().getString(R.string.api_key));
         MapKitFactory.initialize(this);
         setContentView(R.layout.activity_main);
@@ -68,6 +77,16 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
                             placeLayout.setVisibility(View.VISIBLE);
                             mapLayout.setVisibility(View.GONE);
                             settingsLayout.setVisibility(View.GONE);
+                            PlacesFragment placesFragment = (PlacesFragment)getFragmentManager().findFragmentById(R.id.placesFragment);
+                            if(placesFragment!=null){
+                                Log.d("MAP","MainActivity-onFragmentAction(TRY NOTIFY)(onButtonPressed in SearchFragment)-placesFragment is  NOT NULL");
+                                placesFragment.getGridAdapter().notifyDataSetChanged();
+
+                            }
+                            else{
+                                Log.d("MAP","MainActivity-onFragmentAction(TRY NOTIFY)(onButtonPressed in SearchFragment)-placesFragment is NULL");
+                            }
+
                             Log.d("MAP","Show: places");
                             break;
                         case "Мои маршруты":
@@ -87,6 +106,19 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
                 return true;
             }
         });
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.addTestProvider(LocationManager.GPS_PROVIDER, false, false, false, false, true, true, true, Criteria.POWER_LOW, Criteria.ACCURACY_FINE);
+        locationManager.setTestProviderStatus(LocationManager.GPS_PROVIDER, LocationProvider.AVAILABLE, null, System.currentTimeMillis());
+        locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
+        locationProvider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
+
+        fakeloc = new Location(locationProvider.getName());
+        fakeloc.setTime(System.currentTimeMillis());
+        fakeloc.setAccuracy(3);
+        fakeloc.setBearing(3);
+        fakeloc.setElapsedRealtimeNanos(1);
+        fakeloc.setSpeed(3);
         currentPoint=findViewById(R.id.currentPoint);
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -128,6 +160,14 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
     }
 
     @Override
+    public void onFragmentChangeLoc(Point point) {
+            fakeloc.setLatitude(point.getLatitude());
+            fakeloc.setLongitude(point.getLongitude());
+            locationManager.clearTestProviderLocation(fakeloc.getProvider());
+            locationManager.setTestProviderLocation(fakeloc.getProvider(), fakeloc);
+    }
+
+    @Override
     public void onItemClick(float lat, float lng) {
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
         if (mapFragment != null ) {
@@ -140,6 +180,17 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
         }
 
     }
+
+
+    private void checkPermissions(){
+        int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+        } else {
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION},0);
+        }
+    }
+
 }
 
 

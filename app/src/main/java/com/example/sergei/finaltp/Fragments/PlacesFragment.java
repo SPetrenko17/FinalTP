@@ -63,21 +63,21 @@ public class PlacesFragment extends android.app.Fragment {
         return layout;
     }
     public void addPlace(User user){
-       // Log.d("MAP","PlacesFragment-addPlace:"+user.response.geoObjectCollection.featureMember.get(0).geoObject.point.pos.toString()+" "+ user.response.geoObjectCollection.featureMember.get(0).geoObject.name.toString()+" "+ user.response.geoObjectCollection.featureMember.get(0).geoObject.description.toString()+"\n ALL:\n");
         placeList.add(new Place(user));
 
         for(Place place:placeList){
             Log.d("MAP","PlacesFragment-addPlace \n ALL:"+ place.getName()+" "+place.getAdress()+" "+place.getLat()+" "+place.getLng());
         }
-
-
-        //mGridAdapter.notify();
         mRecyclerView.invalidate();
         this.getView().invalidate();
         mRecyclerView.getRootView().invalidate();
         mGridAdapter.notifyDataSetChanged();
 
     }
+    public GridAdapter getGridAdapter(){
+        return this.mGridAdapter;
+    }
+
 
 
 

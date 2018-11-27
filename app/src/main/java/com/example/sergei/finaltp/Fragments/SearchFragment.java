@@ -3,8 +3,10 @@ package com.example.sergei.finaltp.Fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,7 +36,6 @@ import java.util.List;
 import static android.content.Context.MODE_PRIVATE;
 
 public class SearchFragment extends Fragment  {
-    private final static String KEY_CORDS = "cords";
     private OnFragmentActionListener mListener;
 
     Button searchButton;
@@ -116,6 +117,19 @@ public class SearchFragment extends Fragment  {
         void onFragmentAction(User user);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case 0:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission granted
+                } else {
+                    // permission denied
+                }
+                return;
+        }
+    }
 
 }
 

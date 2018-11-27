@@ -30,6 +30,10 @@ dependencies {
 
     implementation 'com.android.volley:volley:1.1.0'
 
+
+
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
     // Основная библиотека MapKit.
     implementation'com.yandex.android:mapkit:3.1.2'
     // Дополнительные модули MapKit.

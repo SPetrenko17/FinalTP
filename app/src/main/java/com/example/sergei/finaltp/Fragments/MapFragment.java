@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.sergei.finaltp.GridAdapter;
+import com.example.sergei.finaltp.MainActivity;
 import com.example.sergei.finaltp.serializables.User;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKitFactory;
@@ -33,11 +34,8 @@ import com.yandex.mapkit.mapview.MapView;
 
 
 public class MapFragment extends Fragment  {
-    private final static String KEY_CORDS = "cords";
     private MapView mapView;
-    private SearchFragment.OnFragmentActionListener mListener;
-    private GridAdapter.onItemClickListener onItemClickListener;
-
+    private OnFragmentActionListener mListenerLoc;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -62,6 +60,7 @@ public class MapFragment extends Fragment  {
         @Override
         public void onMapLongTap(@NonNull Map map, @NonNull Point point) {
             Log.d("MAP","MapFragment-inputListener-onMapLongTap-point: \n lat: "+point.getLatitude()+"lgt: "+point.getLongitude());
+            mListenerLoc.onFragmentChangeLoc(point);
         }
     };
 
@@ -95,30 +94,25 @@ public class MapFragment extends Fragment  {
     }
     public void showByLatLng(float lat, float lng){
         Log.d("MAP","MapFragment-showByLatLng IS WORKING");
-        Log.d("MAP","MapFragment-showByLatLng-point(without converting): "+lat+" "+lng);
+        Log.d("MAP","MapFragment-showByLatLng-point(wit converting): "+lat+" "+lng);
         mapView.getMap().move(
                 new CameraPosition(new Point(lat, lng), 50.0f, 0.0f, 0.0f),
                 new Animation(Animation.Type.SMOOTH, 0),
                 null);
     }
-        //Замутить отвязывание от лисеннеров
-
         @Override
         public void onAttach(Context context) {
             super.onAttach(context);
             try {
-                mListener = (SearchFragment.OnFragmentActionListener) context;
+                mListenerLoc = (OnFragmentActionListener) context;
 
             } catch (ClassCastException e) {
                 throw new ClassCastException(context.toString()
                         + " должен реализовывать интерфейс OnFragmentActionListener");
             }
         }
-
-
     public interface OnFragmentActionListener {
-        void onFragmentAction(String link);
-        void onFragmentAction(User user);
+        void onFragmentChangeLoc(Point point);
     }
 
 }
