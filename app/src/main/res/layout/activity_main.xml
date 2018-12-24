@@ -9,33 +9,30 @@
     android:weightSum="1"
     android:id="@+id/drawer_layout"
     >
-<LinearLayout
+<FrameLayout
     android:id="@+id/map_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-    <fragment
-        android:id="@+id/searchFragment"
-        android:layout_width="match_parent"
-        android:layout_weight="8"
-        android:paddingBottom="5dp"
-        android:paddingEnd="5dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:paddingStart="5dp"
-        android:paddingTop="5dp"
-        android:layout_height="match_parent"
-        android:name="com.example.sergei.finaltp.Fragments.SearchFragment"/>
+
     <fragment
         android:id="@+id/mapFragment"
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:layout_height="match_parent"
         android:name="com.example.sergei.finaltp.Fragments.MapFragment"/>
+    <fragment
+        android:layout_marginTop="@dimen/lil_dimen"
+        android:layout_marginLeft="@dimen/lil_dimen"
+        android:layout_marginRight="@dimen/lil_dimen"
+        android:id="@+id/searchFragment"
+        android:layout_width="match_parent"
+        android:layout_weight="9"
+        android:layout_height="wrap_content"
+        android:name="com.example.sergei.finaltp.Fragments.SearchFragment"/>
 
-
-</LinearLayout>
+</FrameLayout>
 
     <LinearLayout
         android:id="@+id/place_layout"
@@ -50,7 +47,6 @@
             android:layout_height="match_parent"
             android:name="com.example.sergei.finaltp.Fragments.PlacesFragment"/>
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/settings_layout"
         android:layout_width="match_parent"
@@ -66,9 +62,13 @@
     </LinearLayout>
 
 
+
+
+
+
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="300dp"
+        android:layout_width="320dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"

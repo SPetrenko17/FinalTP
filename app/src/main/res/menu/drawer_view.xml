@@ -3,25 +3,21 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/user_map"
-            android:icon="@android:drawable/btn_default"
             android:textColor="@color/textPrimaryColor"
-            android:title="Карта"/>
+            android:title="@string/map"/>
         <item
             android:id="@+id/user_places"
-            android:icon="@android:drawable/btn_default"
             android:textColor="@color/textPrimaryColor"
-            android:title="Мои места"/>
+            android:title="@string/places"/>
         <item
-            android:id="@+id/user_routes"
-            android:icon="@android:drawable/btn_default"
+            android:id="@+id/user_settings"
             android:textColor="@color/textPrimaryColor"
-            android:title="Мои маршруты"/>
-       
+            android:title="@string/settings"
+            />
         <item
-            android:id="@+id/exit"
-            android:icon="@android:drawable/btn_default"
+            android:id="@+id/user_exit"
             android:textColor="@color/textPrimaryColor"
-            android:title="Выход"
+            android:title="@string/exit"
             />
 
     </group>

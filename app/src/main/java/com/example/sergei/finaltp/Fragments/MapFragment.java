@@ -1,8 +1,10 @@
 package com.example.sergei.finaltp.Fragments;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,6 +20,7 @@ import android.widget.LinearLayout;
 
 import com.example.sergei.finaltp.GridAdapter;
 import com.example.sergei.finaltp.MainActivity;
+import com.example.sergei.finaltp.R;
 import com.example.sergei.finaltp.serializables.User;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKitFactory;
@@ -36,6 +39,11 @@ import com.yandex.mapkit.mapview.MapView;
 public class MapFragment extends Fragment  {
     private MapView mapView;
     private OnFragmentActionListener mListenerLoc;
+    private AlertDialog.Builder alertDialog;
+
+
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -58,11 +66,30 @@ public class MapFragment extends Fragment  {
         }
 
         @Override
-        public void onMapLongTap(@NonNull Map map, @NonNull Point point) {
+        public void onMapLongTap(@NonNull Map map, @NonNull final Point point) {
+            //final Point myPoint = point;
             Log.d("MAP","MapFragment-inputListener-onMapLongTap-point: \n lat: "+point.getLatitude()+"lgt: "+point.getLongitude());
-            mListenerLoc.onFragmentChangeLoc(point);
+            alertDialog = new AlertDialog.Builder(getActivity());
+            alertDialog.setTitle(point.getLatitude()+" "+point.getLongitude());  // заголовок
+            alertDialog.setMessage("message");
+            alertDialog.setPositiveButton("Подменить локацию", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+                    mListenerLoc.onFragmentAddPoint(point);
+                }
+            });
+            alertDialog.setNegativeButton("Добавить в места", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int arg1) {
+                    mListenerLoc.onFragmentChangeLoc(point);
+
+                }
+            });
+            alertDialog.show();
+
+
+
         }
     };
+
 
     @Override
     public void onStart() {
@@ -113,6 +140,9 @@ public class MapFragment extends Fragment  {
         }
     public interface OnFragmentActionListener {
         void onFragmentChangeLoc(Point point);
+        void onFragmentAddPoint(Point point);
     }
+
+
 
 }

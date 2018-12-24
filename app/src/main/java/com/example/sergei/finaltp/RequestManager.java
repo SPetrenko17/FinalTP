@@ -17,22 +17,39 @@ import org.json.JSONObject;
 
 public class RequestManager {
 
-    private String mainUrl = "https://geocode-maps.yandex.ru/1.x/?format=json&apikey=";
-    private String apiKey ="42822888-b48e-4a87-81c8-cbd67770b60b"; // убрать в strings.xml
-
-    private  String adressUrl ="&geocode=";
-    private String adress ="МГТУ Москва";
+    private final String mainUrl = "https://geocode-maps.yandex.ru/1.x/?format=json&apikey=";
+    private String apiKey;
+    private final  String adressUrl ="&geocode=";
+    private String adress;
     private RequestQueue requestQueue;
 
-    public RequestManager(Context context, String adress){
+    public RequestManager(Context context){
 
         this.requestQueue = Volley.newRequestQueue(context);
-        this.adress = adress;
-    }
+        this.apiKey=context.getString(R.string.api_key_geocoder);
 
-    public void getCordsByAdress(final VolleyCallback callback){
+    }
+    public void getCordsByAdress(final VolleyCallback callback, String adress){
         Log.d("MAP",mainUrl+apiKey+adressUrl+adress);
         JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, mainUrl+apiKey+adressUrl+adress, null,
+
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        callback.onSuccess(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("Error", error.toString());
+            }
+        });
+
+        this.requestQueue.add(stringRequest);
+    }
+    public void getAdressByCords(final VolleyCallback callback, String cords){
+        Log.d("MAP",mainUrl+apiKey+adressUrl+cords);
+        JsonObjectRequest stringRequest = new JsonObjectRequest(Request.Method.GET, mainUrl+apiKey+adressUrl+cords, null,
 
                 new Response.Listener<JSONObject>() {
                     @Override

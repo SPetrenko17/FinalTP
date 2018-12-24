@@ -19,13 +19,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="English" />
+                android:text="@string/ru" />
 
             <RadioButton
                 android:id="@+id/radioButtonEn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Русский" />
+                android:text="@string/en" />
         </RadioGroup>
 
     </LinearLayout>

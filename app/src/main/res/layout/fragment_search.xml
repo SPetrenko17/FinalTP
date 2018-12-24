@@ -1,40 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:name="com.example.sergei.finaltp.Fragments.SearchFragment"
-    android:id="@+id/search_fragment">
-
-        <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+           android:id="@+id/search_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorWhite"
-            android:paddingBottom="5dp"
-            android:paddingEnd="5dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:paddingStart="5dp"
-            android:paddingTop="5dp">
+            android:background="@drawable/ic_menu"
+            android:alpha="0.2"
+            android:orientation="horizontal">
 
         <Button
             android:id="@+id/button_search"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:background="@drawable/ic_menu"
-            android:paddingBottom="11dp"
-            android:paddingEnd="11dp"
-            android:paddingLeft="11dp"
-            android:paddingRight="11dp"
-            android:paddingStart="11dp"
-            android:paddingTop="11dp" />
+             />
 
         <EditText
             android:id="@+id/edittext_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Поиск"
             android:inputType="text" />
-    </LinearLayout>
 
 
-</android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

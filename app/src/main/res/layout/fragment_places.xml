@@ -5,19 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_weight="1"
     android:name="com.example.sergei.finaltp.Fragments.PlacesFragment"
     android:id="@+id/places_fragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_gravity="center_vertical">
 
     <android.support.v7.widget.RecyclerView
+
         android:id="@+id/recycler_view_places"
-        android:padding="8dp"
         android:clipToPadding="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-
         />
 
 

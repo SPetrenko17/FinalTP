@@ -57,6 +57,7 @@ public class GridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 Place item = mPlaceList.get(j);
                 Log.d("MAP","OnClick GRIDADAPTER RecyclerView "+item.getName());
                 onItemClickListener.onItemClick(item.getLat(),item.getLng());
+
             }
         });
     }
@@ -81,6 +82,7 @@ public class GridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         public Button mPlaceButton;
 
         public PlaceViewHolder(final View itemView) {
+
             super(itemView);
             mPlaceName = itemView.findViewById(R.id.place_name);
             mPlaceAdress = itemView.findViewById(R.id.place_adress);

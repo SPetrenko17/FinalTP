@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">FinalTP</string>
+    <string name="api_key">06c1a0dc-87bf-4d77-a2d6-8c5cc4a4e74d</string>
+    <string name="api_key_geocoder">42822888-b48e-4a87-81c8-cbd67770b60b</string>
+
+    <string name="empty_coordinates">00.00000 , 00.00000</string>
+    <string name="ru">Русский</string>
+    <string name="en">English</string>
+    <string name="current_loc">Current location:</string>
+    <string name="find">Find</string>
+    <string name="check">Check</string>
+    <string name="map">Map</string>
+    <string name="places">My places</string>
+    <string name="routes">My routes</string>
+    <string name="settings">Settings </string>
+    <string name="exit">Exit</string>
+    <string name="setlocale">Set locale</string>
+    <string name="dialogMessage">Select action</string>
+    <string name="nullLoc">Can\'t find location</string>
+
+</resources>
