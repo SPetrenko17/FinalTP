@@ -4,24 +4,27 @@
     android:layout_height="wrap_content"
     android:id="@+id/item_place"
     android:orientation="horizontal"
+    android:padding="@dimen/lil_dimen"
+    android:clickable="true"
     >
     <LinearLayout
         android:id="@+id/point_layout"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1">
 
     <TextView
         android:id="@+id/place_name"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textColor="@color/colorWhite"
         />
     <TextView
         android:id="@+id/place_adress"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textColor="@color/colorWhite"
         android:layout_alignParentStart="true"
@@ -33,11 +36,12 @@
         android:id="@+id/latlng_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_weight="1">
     <TextView
         android:id="@+id/place_lat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textColor="@color/colorWhite"
         android:layout_alignParentStart="true"
@@ -45,8 +49,8 @@
         />
     <TextView
         android:id="@+id/place_lng"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@android:color/transparent"
         android:textColor="@color/colorWhite"
         android:layout_alignParentStart="true"
@@ -55,6 +59,7 @@
     </LinearLayout>
 
     <Button
+        android:padding="@dimen/lil_dimen"
         android:layout_width="@dimen/lil_view_dimen"
         android:layout_height="wrap_content"
         android:id="@+id/place_button"/>

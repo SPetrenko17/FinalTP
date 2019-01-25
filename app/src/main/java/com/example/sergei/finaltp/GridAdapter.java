@@ -41,7 +41,7 @@ public class GridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder viewHolder, final int i)  {
-        final int j = i;
+
         final Place currentPlace = mPlaceList.get(i);
         Context context = viewHolder.itemView.getContext();
 
@@ -54,7 +54,7 @@ public class GridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             public void onClick(View view) {
             Log.d("MAP","OPEN PLACE ON MAP");
 
-                Place item = mPlaceList.get(j);
+                Place item = mPlaceList.get(i);
                 Log.d("MAP","OnClick GRIDADAPTER RecyclerView "+item.getName());
                 onItemClickListener.onItemClick(item.getLat(),item.getLng());
 
@@ -70,6 +70,7 @@ public class GridAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
     }
 
 

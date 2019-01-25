@@ -2,7 +2,6 @@
     <string name="app_name">FinalTP</string>
     <string name="api_key">06c1a0dc-87bf-4d77-a2d6-8c5cc4a4e74d</string>
     <string name="api_key_geocoder">42822888-b48e-4a87-81c8-cbd67770b60b</string>
-
     <string name="empty_coordinates">00.00000 , 00.00000</string>
     <string name="ru">Русский</string>
     <string name="en">English</string>
@@ -17,6 +16,13 @@
     <string name="setlocale">Выбрать язык</string>
     <string name="dialogMessage">Выберите действие</string>
     <string name="nullLoc">Невозможно найти геоданные</string>
+    <string name="exit_question">Выйти?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="resumeWork">Программа работает</string>
+    <string name="changeLoc">Подменить геоданные</string>
+    <string name="addLoc">Добавить в места</string>
+    <string name="select">Выберите действие</string>
 
 
 </resources>

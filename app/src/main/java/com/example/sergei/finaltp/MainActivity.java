@@ -7,6 +7,8 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -16,6 +18,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,11 +32,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sergei.finaltp.Fragments.MapFragment;
 import com.example.sergei.finaltp.Fragments.PlacesFragment;
 import com.example.sergei.finaltp.Fragments.SearchFragment;
 import com.example.sergei.finaltp.serializables.GeoObject;
+import com.example.sergei.finaltp.serializables.Response;
 import com.example.sergei.finaltp.serializables.User;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
@@ -53,22 +58,12 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
         GridAdapter.onItemClickListener,
                                  MapFragment.OnFragmentActionListener
                                                              ,LocationListener
-                                                                        , PlacesFragment.OnFragmentActionListener{
-
-
-    SharedPreferences sPref;
-    final String SAVED_LOCALE = "saved_locale";
+                                                                        , PlacesFragment.OnPlaceFragmentActionListener{
 
     static LocationManager locationManager;
-
-
+    AlertDialog.Builder alertDialog;
     PlacesFragment placesFragment ;
     TextView currentPoint;
-    Double currLat;
-    Double currLon;
-
-
-
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
 
@@ -81,18 +76,12 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
     @BindView(R.id.nav_view)
     NavigationView navView;
 
-    @BindView(R.id.settings_layout)
-    LinearLayout settingsLayout;
-
-
-
-
-
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         checkPermissions();
 
         MapKitFactory.setApiKey(getResources().getString(R.string.api_key));
@@ -104,11 +93,18 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         View headView =navView.getHeaderView(0);
-        currentPoint = (TextView)headView.findViewById(R.id.current_point);
+        int permissionStatus = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+
+        //if (permissionStatus == PackageManager.PERMISSION_GRANTED) {
+            currentPoint = (TextView)headView.findViewById(R.id.current_point);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            onLocationChanged(location);
+            //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        //}
+        //currentPoint = (TextView)headView.findViewById(R.id.current_point);
 
 
-        Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        onLocationChanged(location);
+
 
         if (mapFragment != null) Log.d("MAP", "MainActivity-OnCreate-mapFragment is not null");
 
@@ -125,24 +121,20 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
                         Log.d("MAP", "Show: map");
                         placeLayout.setVisibility(View.GONE);
                         mapLayout.setVisibility(View.VISIBLE);
-                        settingsLayout.setVisibility(View.GONE);
                         break;
                     case R.id.user_places:
                         placeLayout.setVisibility(View.VISIBLE);
                         mapLayout.setVisibility(View.GONE);
-                        settingsLayout.setVisibility(View.GONE);
                         placesFragment = (PlacesFragment) getFragmentManager().findFragmentById(R.id.placesFragment);
                         Log.d("MAP", "Show: places");
                         break;
                     case R.id.user_settings:
-                        placeLayout.setVisibility(View.GONE);
-                        mapLayout.setVisibility(View.GONE);
-                        settingsLayout.setVisibility(View.VISIBLE);
-
+                        openSettings();
                         Log.d("MAP", "Show: settings");
                         break;
                     case R.id.user_exit:
                         Log.d("MAP", "Show: exit");
+                        exit();
                         break;
                 }
                 return true;
@@ -152,21 +144,34 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
 
 
     }
-    @SuppressWarnings("deprecation")
-    private void changeLocale(Locale locale)
-    {
-        Locale.setDefault(locale);
-        Configuration configuration = new Configuration();
-        configuration.setLocale(locale);
-        getApplicationContext().getResources()
-                .updateConfiguration(configuration,
-                        getApplicationContext()
-                                .getResources()
-                                .getDisplayMetrics());
-
+    void openSettings(){
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            final Intent intent = new Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS);
+            startActivity(intent);
+        }
+        else {
+            final Intent intent = new Intent(Settings.ACTION_SETTINGS);
+            startActivity(intent);
+        }
     }
+    void exit(){
+        alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle(getResources().getString(R.string.exit));  // заголовок
+        alertDialog.setMessage(getResources().getString(R.string.exit_question));
+        alertDialog.setPositiveButton(getResources().getString(R.string.yes), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                System.exit(0);
+            }
+        });
+        alertDialog.setNegativeButton(getResources().getString(R.string.no), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int arg1) {
+                Toast toast = Toast.makeText(getApplicationContext(),getResources().getString(R.string.resumeWork),Toast.LENGTH_LONG);
+                toast.show();
 
-
+            }
+        });
+        alertDialog.show();
+    }
     @Override
     protected void onStop() {
         super.onStop();
@@ -202,15 +207,18 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
             Log.d("MAP", "MainActivity-onFragmentAction(USER)(onButtonPressed in SearchFragment)-placesFragment is NULL");
         }
     }
-
+    //в процессе
     @Override
-    public void onFragmentAction(GeoObject geoObject) {
+    public void onPlaceFragmentAction(User user) {
         Log.d("MAP","onFrafmentAction geoobject");
         PlacesFragment placesFragment = (PlacesFragment) getFragmentManager().findFragmentById(R.id.placesFragment);
-        placesFragment.addPlace(geoObject);
+        try{
+            placesFragment.addPlace(user);
+        }
+        catch (NullPointerException e){
+            Log.e("ERROR",e.getMessage());
+        }
 
-//        Log.d("MAP", "Добавляем новый элемент в лист ");
-       // placesFragment.addPlace(new Place(geoObject));
     }
 
 
@@ -218,15 +226,14 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
     @Override
     public void onFragmentChangeLoc(Point point) {
         PlacesFragment placesFragment = (PlacesFragment) getFragmentManager().findFragmentById(R.id.placesFragment);
-        Log.d("MAP", "Добавляем новый элемент в лист ");
-        //placesFragment.addPlace();
-        placesFragment.addPlace(new Place("test","test",(float) point.getLatitude(),(float) point.getLongitude()));
+        //Log.d("MAP", "Добавляем новый элемент в лист ");
+        placesFragment.addPlace(point);
+       // placesFragment.addPlace(new Place("test","test",(float) point.getLatitude(),(float) point.getLongitude()));
     }
 
-    @Override
+    @Override // срабатывает при нажатии на диалоге
     public void onFragmentAddPoint(Point point) {
         MyTask myTask = new MyTask();
-
          myTask.execute((double)point.getLatitude(),(double)point.getLongitude());
     }
 
@@ -237,22 +244,25 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
             Log.d("MAP", "MainActivity-onFragmentAction(STRING)(onButtonPressed in SearchFragment)-mapFragment is NOT NULL");
             mapFragment.showByLatLng(lat, lng);
             mapFragment.getView().invalidate();
+
+            placeLayout.setVisibility(View.GONE);
+            mapLayout.setVisibility(View.VISIBLE);
         } else {
             Log.d("MAP", "MainActivity-onFragmentAction(onButtonPressed in SearchFragment)-mapFragment is NULL");
         }
 
     }
 
-    void testLoc2(double lat, double lng){
+    void testLoc(double lat, double lng){
         locationManager.addTestProvider (LocationManager.GPS_PROVIDER,
                 "requiresNetwork" == "",
-                "requiresSatellite" == "",
-                "requiresCell" == "",
-                "hasMonetaryCost" == "",
-                "supportsAltitude" == "",
-                "supportsSpeed" == "",
-                "supportsBearing" == "",
-                android.location.Criteria.POWER_LOW,
+                    "requiresSatellite" == "",
+                        "requiresCell" == "",
+                            "hasMonetaryCost" == "",
+                              "supportsAltitude" == "",
+                                    "supportsSpeed" == "",
+                                          "supportsBearing" == "",
+                                                android.location.Criteria.POWER_LOW,
                 android.location.Criteria.ACCURACY_FINE);
 
         Location newLocation = new Location(LocationManager.GPS_PROVIDER);
@@ -322,11 +332,11 @@ public class MainActivity extends AppCompatActivity implements SearchFragment.On
         protected Void doInBackground(Double... values) {
 
             try {
-                while(true) {
-                    testLoc2(values[0], values[1]);
+                //был while(true)
+                    testLoc(values[0], values[1]);
                     Log.d("MAP", "Подменяю данные на: "+values[0]+" - "+values[1]);
                     TimeUnit.SECONDS.sleep(1);
-                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

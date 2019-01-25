@@ -29,6 +29,7 @@ public class AdressCallback implements VolleyCallback {
         for(int i =0;i<user.response.geoObjectCollection.featureMember.size();i++){
             Log.d("MAP",i+": "+user.response.geoObjectCollection.featureMember.get(i).geoObject.point.pos.toString()+"\n");
         }
+        Log.d("MAP","AdressCallback");
         if(!user.response.geoObjectCollection.featureMember.isEmpty()) {
             mListener.onFragmentAction(user.response.geoObjectCollection.featureMember.get(0).geoObject.point.pos.toString());
             mListener.onFragmentAction(user);

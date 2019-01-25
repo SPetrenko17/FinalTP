@@ -3,6 +3,7 @@ package com.example.sergei.finaltp;
 import android.util.Log;
 
 import com.example.sergei.finaltp.serializables.GeoObject;
+import com.example.sergei.finaltp.serializables.Response;
 import com.example.sergei.finaltp.serializables.User;
 
 public class Place {
@@ -26,12 +27,12 @@ public class Place {
         this.lat=lat;
         this.lng=lng;
     }
-    public Place(GeoObject geoObject){
+    public Place(Response response){
         Log.d("MAP","create new place by geoobject ");
-        this.name=geoObject.name.toString();
-        this.adress=geoObject.metaDataProperty.geocoderMetaData.text;
-        this.lat=Float.valueOf(geoObject.point.pos.split(" ")[0]); //возможно надо поменять местаи lat и  lng
-        this.lng=Float.valueOf(geoObject.point.pos.split(" ")[1]);
+        this.name=response.geoObjectCollection.featureMember.get(0).geoObject.name.toString();
+        this.adress=response.geoObjectCollection.featureMember.get(0).geoObject.metaDataProperty.geocoderMetaData.text;
+        this.lat=Float.valueOf(response.geoObjectCollection.featureMember.get(0).geoObject.point.pos.split(" ")[0]); //возможно надо поменять местаи lat и  lng
+        this.lng=Float.valueOf(response.geoObjectCollection.featureMember.get(0).geoObject.point.pos.split(" ")[1]);
     }
 
     public float getLat() {
@@ -50,7 +51,5 @@ public class Place {
         return adress;
     }
 
-    public void setAdress(String name){
-        this.adress=adress;
-    }
+
 }

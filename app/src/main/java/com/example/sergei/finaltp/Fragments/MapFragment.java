@@ -1,8 +1,6 @@
 package com.example.sergei.finaltp.Fragments;
-
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -10,26 +8,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
-
-import com.example.sergei.finaltp.GridAdapter;
-import com.example.sergei.finaltp.MainActivity;
 import com.example.sergei.finaltp.R;
-import com.example.sergei.finaltp.serializables.User;
 import com.yandex.mapkit.Animation;
 import com.yandex.mapkit.MapKitFactory;
 import com.yandex.mapkit.geometry.Point;
-import com.yandex.mapkit.layers.GeoObjectTapEvent;
-import com.yandex.mapkit.layers.GeoObjectTapListener;
-import com.yandex.mapkit.map.CameraListener;
 import com.yandex.mapkit.map.CameraPosition;
-import com.yandex.mapkit.map.CameraUpdateSource;
 import com.yandex.mapkit.map.InputListener;
 import com.yandex.mapkit.map.Map;
 import com.yandex.mapkit.mapview.MapView;
@@ -40,9 +27,6 @@ public class MapFragment extends Fragment  {
     private MapView mapView;
     private OnFragmentActionListener mListenerLoc;
     private AlertDialog.Builder alertDialog;
-
-
-
 
     @Nullable
     @Override
@@ -67,30 +51,24 @@ public class MapFragment extends Fragment  {
 
         @Override
         public void onMapLongTap(@NonNull Map map, @NonNull final Point point) {
-            //final Point myPoint = point;
             Log.d("MAP","MapFragment-inputListener-onMapLongTap-point: \n lat: "+point.getLatitude()+"lgt: "+point.getLongitude());
             alertDialog = new AlertDialog.Builder(getActivity());
             alertDialog.setTitle(point.getLatitude()+" "+point.getLongitude());  // заголовок
-            alertDialog.setMessage("message");
-            alertDialog.setPositiveButton("Подменить локацию", new DialogInterface.OnClickListener() {
+            alertDialog.setMessage(getResources().getString(R.string.select));
+            alertDialog.setPositiveButton(getResources().getString(R.string.changeLoc), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int arg1) {
                     mListenerLoc.onFragmentAddPoint(point);
                 }
             });
-            alertDialog.setNegativeButton("Добавить в места", new DialogInterface.OnClickListener() {
+            alertDialog.setNegativeButton(getResources().getString(R.string.addLoc), new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int arg1) {
                     mListenerLoc.onFragmentChangeLoc(point);
 
                 }
             });
             alertDialog.show();
-
-
-
         }
     };
-
-
     @Override
     public void onStart() {
         super.onStart();

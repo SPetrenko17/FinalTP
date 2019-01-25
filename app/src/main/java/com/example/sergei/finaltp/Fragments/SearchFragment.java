@@ -67,16 +67,13 @@ public class SearchFragment extends Fragment  {
     private View createView() {
         LinearLayout layout = new LinearLayout(getActivity());
         searchButton = new Button(getActivity());
+        searchButton.setPadding(2,2,2,2);
         searchButton.setText(getResources().getText(R.string.find));
         searchButton.setTextColor(getResources().getColor(R.color.colorWhite));
         searchButton.setOnClickListener(onClickListener);
         searchButton.setAlpha(0.8f);
         searchButton.setBackground(getResources().getDrawable(R.drawable.layout_bg));
         seachEditText = new EditText(getActivity());
-        seachEditText.setHighlightColor(getResources().getColor(R.color.colorWhite));
-        seachEditText.setHintTextColor(getResources().getColor(R.color.colorWhite));
-        seachEditText.setLinkTextColor(getResources().getColor(R.color.colorWhite));
-
         layout.addView(searchButton);
         layout.addView(seachEditText);
         layout.setGravity(Gravity.LEFT);

@@ -17,5 +17,10 @@
     <string name="setlocale">Set locale</string>
     <string name="dialogMessage">Select action</string>
     <string name="nullLoc">Can\'t find location</string>
+    <string name="exit_question">Exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="resumeWork">Program is working</string>
+    <string name="select">Select action</string>
 
 </resources>

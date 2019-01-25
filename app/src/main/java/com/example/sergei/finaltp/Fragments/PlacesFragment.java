@@ -1,7 +1,5 @@
 package com.example.sergei.finaltp.Fragments;
-
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -11,25 +9,18 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-
-import com.android.volley.RequestQueue;
-
 import com.example.sergei.finaltp.AdressCallback;
 import com.example.sergei.finaltp.CordsCallback;
 import com.example.sergei.finaltp.GridAdapter;
-import com.example.sergei.finaltp.MainActivity;
 import com.example.sergei.finaltp.Place;
-
-import com.example.sergei.finaltp.R;
 import com.example.sergei.finaltp.RequestManager;
 import com.example.sergei.finaltp.serializables.GeoObject;
+import com.example.sergei.finaltp.serializables.Response;
 import com.example.sergei.finaltp.serializables.User;
 import com.google.gson.Gson;
 import com.yandex.mapkit.geometry.Point;
@@ -38,8 +29,12 @@ public class PlacesFragment extends android.app.Fragment {
 
     RequestManager serverManager;
     CordsCallback cordsCallback;
+    AdressCallback adressCallback;
     GeoObject geoObject;
-    private PlacesFragment.OnFragmentActionListener mListener;
+    Response response;
+    User user;
+    com.example.sergei.finaltp.serializables.Point point;
+    private OnPlaceFragmentActionListener mListener;
 
     private RecyclerView mRecyclerView;
     private GridAdapter mGridAdapter;
@@ -51,12 +46,13 @@ public class PlacesFragment extends android.app.Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         serverManager = new RequestManager(getActivity());
-        cordsCallback = new CordsCallback(geoObject,mListener);
+        cordsCallback = new CordsCallback(user,mListener);
+        //adressCallback = new AdressCallback(user,mListener)
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         placeList = new ArrayList<>();
         Gson gson = new Gson();
         ArrayList<String> textList = new ArrayList<String>();
-        textList.add("Москва-Тверская улица 6с1-37.611347-55.760241");
+        textList.add("Москва-Тверская улица 6с1-55.760241-37.611347");
         String jsonText1 = gson.toJson(textList);
             String jsonText = sharedPreferences.getString("key",jsonText1);
 
@@ -68,11 +64,6 @@ public class PlacesFragment extends android.app.Fragment {
                 //placeList.add(new Place(strPlace[0], strPlace[1], Float.parseFloat(strPlace[2]), Float.parseFloat(strPlace[3])));
                 Log.d("MAP","SPGEt  "+strPlace[0]+ strPlace[1]+ Float.parseFloat(strPlace[2])+ Float.parseFloat(strPlace[3]));
             }
-
-
-
-       //Log.d("MAP",placeList.get(0).getName()+placeList.get(0).getAdress());
-
         return createView();
 
     }
@@ -89,6 +80,7 @@ public class PlacesFragment extends android.app.Fragment {
     }
     public void addPlace(User user){
         placeList.add(new Place(user));
+        //parseJSON();
 
         Gson gson = new Gson();
         ArrayList<String> textList = new ArrayList<String>();
@@ -126,6 +118,7 @@ public class PlacesFragment extends android.app.Fragment {
         String jsonText = gson.toJson(textList);
         sharedPreferences.edit().putString("key", jsonText);
         sharedPreferences.edit().apply();
+        sharedPreferences.edit().commit();
 
         for(Place places:placeList){
             Log.d("MAP","PlacesFragment-addPlace_LIST_(PLACE):"+ places.getName()+" "+places.getAdress()+" "+places.getLat()+" "+places.getLng());
@@ -137,10 +130,9 @@ public class PlacesFragment extends android.app.Fragment {
 
 
     }
-    public void addPlace(GeoObject geoObject){
-        Log.d("MAP","addAdressPlace");
-        placeList.add(new Place(geoObject));
-        parseJSON(geoObject);
+    public void addPlace(Point point){
+        //placeList.add(new Place("new place","new adress",(float)point.getLatitude(),(float)point.getLongitude()));
+        parseJSON(new Point((float)point.getLatitude(),(float)point.getLongitude()));
         Gson gson = new Gson();
         ArrayList<String> textList = new ArrayList<String>();
 
@@ -153,6 +145,7 @@ public class PlacesFragment extends android.app.Fragment {
         String jsonText = gson.toJson(textList);
         sharedPreferences.edit().putString("key", jsonText);
         sharedPreferences.edit().apply();
+        sharedPreferences.edit().commit();
 
         for(Place places:placeList){
             Log.d("MAP","PlacesFragment-addPlace_LIST_(PLACE):"+ places.getName()+" "+places.getAdress()+" "+places.getLat()+" "+places.getLng());
@@ -161,26 +154,30 @@ public class PlacesFragment extends android.app.Fragment {
         mGridAdapter.notifyDataSetChanged();
 
 
+
+
     }
+
     private void parseJSON(Point point) {
-        Log.d("MAP","ParseJson");
+        Log.d("MAP","ParseJson_Point");
         serverManager.getAdressByCords(cordsCallback,point.getLongitude()+","+point.getLatitude());
     }
-    private void parseJSON(GeoObject geoObject) {
-        Log.d("MAP","ParseJson");
-        serverManager.getAdressByCords(cordsCallback,geoObject.point.pos);
+
+
+    private void parseJSON() {
+        if(placeList.size()>1)
+        serverManager.getAdressByCords(cordsCallback,placeList.get(placeList.size()-1).getLat()+","+placeList.get(placeList.size()-1).getLng());
     }
 
 
-    public interface OnFragmentActionListener {
-        void onFragmentAction(String link);
-        void onFragmentAction(GeoObject geoObject);
+    public interface OnPlaceFragmentActionListener {
+        void onPlaceFragmentAction(User user);
     }
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try {
-            mListener = (PlacesFragment.OnFragmentActionListener) context;
+            mListener = (PlacesFragment.OnPlaceFragmentActionListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException(context.toString()
                     + " должен реализовывать интерфейс OnFragmentActionListener");
